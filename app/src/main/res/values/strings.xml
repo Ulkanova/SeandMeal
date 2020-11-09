@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">SeandMeal</string>
+    <string name="nombre">Nombre</string>
+    <string name="tipo_de_tarjeta">Tipo de tarjeta:</string>
+    <string name="pass">Contraseña</string>
+    <string name="repetir_pass">Repetir Contraseña</string>
+    <string name="debito">Débito</string>
+    <string name="credito">Crédito</string>
+    <string name="nroTarjeta">Número de Tarjeta</string>
+    <string name="ccv">CCV</string>
+    <string name="vencimiento">Fecha de vencimiento</string>
+    <string name="mes">Mes</string>
+    <string name="year">Año</string>
+    <string name="cbu">CBU</string>
+    <string name="alias_cbu">Alias CBU</string>
+    <string name="cargaInicial">¿Realizar carga inicial?</string>
+    <string name="tyc">Acepto los términos y condiciones</string>
+    <string name="email">Email</string>
 </resources>

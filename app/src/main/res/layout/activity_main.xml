@@ -1,18 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foregroundTint="@color/rosaFuerte"
+    android:orientation="vertical"
+    android:theme="@style/Theme.SeandMeal"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/txtNombre"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:ems="10"
+        android:hint="@string/nombre"
+        android:inputType="textPersonName" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/txtPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/pass"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/txtRptPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/repetir_pass"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/txtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/lblTipoTarjeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:text="@string/tipo_de_tarjeta" />
+
+    <RadioGroup
+        android:id="@+id/rdgrpTipoTarjeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rdbtnDebito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/debito" />
+
+        <RadioButton
+            android:id="@+id/rdbtnCredito"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/credito" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtTarjeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/nroTarjeta"
+            android:inputType="numberSigned" />
+
+        <EditText
+            android:id="@+id/txtCcv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:ems="3"
+            android:enabled="false"
+            android:hint="@string/ccv"
+            android:inputType="numberSigned" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/lblVencimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/vencimiento" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/mes"
+            android:inputType="numberSigned" />
+
+        <EditText
+            android:id="@+id/txtAnio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/year"
+            android:inputType="numberSigned" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/txtCbu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/cbu"
+        android:inputType="numberSigned" />
+
+    <EditText
+        android:id="@+id/txtAlias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/alias_cbu"
+        android:inputType="text" />
+
+    <Switch
+        android:id="@+id/swCargaInicial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cargaInicial"
+        android:theme="@style/Theme.SeandMeal"/>
+
+    <TextView
+        android:id="@+id/lblMontoCarga"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Carga Inicial"
+        android:visibility="gone" />
+
+    <SeekBar
+        android:id="@+id/sbCargaInicial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="1500"
+        android:min="0"
+        android:progressTint="@color/purple_200"
+        android:thumbTint="@color/purple_500"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/chkTyC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/purple_700"
+            android:text="@string/tyc" />
+
+    </LinearLayout>
+
+</LinearLayout>
