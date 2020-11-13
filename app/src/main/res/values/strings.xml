@@ -16,4 +16,6 @@
     <string name="cargaInicial">¿Realizar carga inicial?</string>
     <string name="tyc">Acepto los términos y condiciones</string>
     <string name="email">Email</string>
+    <string name="registrar">Registrar</string>
+    <string name="mensajePass">Las contraseñas no coinciden</string>
 </resources>
