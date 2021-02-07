@@ -1,10 +1,16 @@
 package com.ulkanova;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,11 +42,18 @@ public class MainActivity extends AppCompatActivity {
     Button btnRegistrar;
     String patronEmail = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+" ;
     RadioButton rdbCredito;
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         swCarga = findViewById(R.id.swCargaInicial);
         sbCarga = findViewById(R.id.sbCargaInicial);
         lblMonto = findViewById(R.id.lblMontoCarga);
@@ -58,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         btnRegistrar = findViewById(R.id.btnRegistrar);
         rdbCredito = findViewById(R.id.rdbtnCredito);
 
+
 //      CHECK LISTENER
         CompoundButton.OnCheckedChangeListener listenerSWCHK = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -71,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                              sbCarga.setProgress(step); //Setea el valor minimo de carga
                          }
                          else {
+                             sbCarga.setProgress(0);
                              sbCarga.setVisibility(View.GONE);
                              lblMonto.setVisibility(View.GONE);
                          }
@@ -78,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.chkTyC:
                          if(isChecked) {
                              btnRegistrar.setEnabled(true);
-
                          }
                          else btnRegistrar.setEnabled(false);
                         break;
@@ -92,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 lblMonto.setText("$ " + Integer.toString(progress));
-                if(progress==0) sbCarga.setProgress(step);
+                if(progress==0 && swCarga.isChecked()) sbCarga.setProgress(step);
                 else sbCarga.setProgress(Math.round(progress/step)*step);
             }
 
@@ -249,7 +263,31 @@ public class MainActivity extends AppCompatActivity {
         sbCarga.setOnSeekBarChangeListener(listenerSeek);
         btnRegistrar.setOnClickListener(listenerClick);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.itmregistrarme:
+                Intent i1 = new Intent(this,MainActivity.class);
+                startActivity(i1);
+                return true;
+            case R.id.itmCrearItem:
+                Toast.makeText(this,"CREASTE UN ITEM",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.itmListarItems:
+                return true;
+            default:
+                Toast.makeText(this, "WHAT??", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private boolean vacio (EditText campo){
         if(campo.getText().length()==0) return true;
         else return false;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/itmregistrarme"
+        android:title="Registrarme"
+     />
+    <item
+        android:id="@+id/itmCrearItem"
+        android:title="Crear Item"
+        />
+    <item
+        android:id="@+id/itmListarItems"
+        android:title="Lista de items" />
+</menu>

@@ -9,7 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SeandMeal">
-        <activity android:name=".MainActivity">
+
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+
+        <activity
+            android:name=".ListaPlatos"
+            android:label="@string/title_activity_lista_platos"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".NuevoPlato"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:parentActivityName=".HomeActivity" />
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
