@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Registro");
 
         swCarga = findViewById(R.id.swCargaInicial);
         sbCarga = findViewById(R.id.sbCargaInicial);
@@ -271,20 +272,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case android.R.id.home:
-                onBackPressed();
-                return true;
             case R.id.itmregistrarme:
-                Intent i1 = new Intent(this,MainActivity.class);
-                startActivity(i1);
+                Intent intentRegistro = new Intent(this,MainActivity.class);
+                startActivity(intentRegistro);
                 return true;
             case R.id.itmCrearItem:
-                Toast.makeText(this,"CREASTE UN ITEM",Toast.LENGTH_SHORT).show();
+                Intent intentCrearItem = new Intent(this,NuevoPlato.class);
+                startActivity(intentCrearItem);
                 return true;
             case R.id.itmListarItems:
+                Intent intentListarItem = new Intent(this, ListaPlatos.class);
+                startActivity(intentListarItem);
                 return true;
+            case android.R.id.home: onBackPressed(); return true;
             default:
-                Toast.makeText(this, "WHAT??", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "How do you??", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

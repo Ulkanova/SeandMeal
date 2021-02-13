@@ -43,8 +43,12 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intentListarItem = new Intent(this, ListaPlatos.class);
                 startActivity(intentListarItem);
                 return true;
+            case R.id.itmNuevoPedido:
+                Intent intentNuevoPedido = new Intent(this, PedidoActivity.class);
+                startActivity(intentNuevoPedido);
+                return true;
             default:
-                Toast.makeText(this, "How do you??", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Opción inválida", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -59,10 +59,20 @@
                 android:id="@+id/lblPrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:textColor="@color/purple_700"
-                android:textStyle="bold"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnPedir"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Pedir >"
+                android:textColor="#9C27B0"
+                android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

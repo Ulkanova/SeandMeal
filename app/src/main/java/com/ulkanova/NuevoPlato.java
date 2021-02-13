@@ -35,6 +35,7 @@ public class NuevoPlato extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Nuevo Plato");
         guardar = findViewById(R.id.btnGuardarPlato);
         txtCalorias=findViewById(R.id.txtCalorias);
         txtTitulo=findViewById(R.id.txtTitulo);

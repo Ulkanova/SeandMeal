@@ -191,9 +191,8 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/registrar"
-                android:backgroundTint="@color/purple_500"
-                android:textColor="@color/white"
-                />
+                android:theme="@style/Theme.SeandMeal"
+                style="@style/Widget.AppCompat.Button.Colored"/>
 
         </LinearLayout>
 
