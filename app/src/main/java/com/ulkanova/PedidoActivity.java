@@ -25,13 +25,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ulkanova.dao.AppRepository;
+import com.ulkanova.dao.PedidoRepository;
+import com.ulkanova.model.Pedido;
 import com.ulkanova.model.Plato;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class PedidoActivity extends AppCompatActivity {
+public class PedidoActivity extends AppCompatActivity {//implements PedidoRepository.OnResultCallback {
     public static final int CODIGO_PEDIDO = 777;
     Toolbar toolbar;
     EditText txtEmail, txtDireccion;
@@ -41,6 +45,7 @@ public class PedidoActivity extends AppCompatActivity {
     Plato platoSeleccionado;
     ListView listViewPedidos;
     List<Plato> pedido;
+    Pedido pedidoConfirmar;
     ArrayList<String> platosSeleccionados;
     ArrayList<Double> preciosPlatos;
     ArrayAdapter adapterLista;
@@ -50,6 +55,7 @@ public class PedidoActivity extends AppCompatActivity {
     Double total=0.0;
     ConfirmarPedidoTask tarea;
     BroadcastReceiver br;
+    PedidoRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,8 @@ public class PedidoActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Realizar Pedido");
+
+     //   repository = new PedidoRepository(this.getApplication(), this);
 
         crearCanal(this);
 
@@ -164,6 +172,13 @@ public class PedidoActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public void onResult(List result) {
+//        btnConfirmar.setText("PEDIDO CONFIRMADO");
+//        Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
+//        startService(i);
+//    }
+
     class ConfirmarPedidoTask extends AsyncTask<Plato,Integer, Integer>{
 
         @Override
@@ -181,17 +196,16 @@ public class PedidoActivity extends AppCompatActivity {
 
         @Override
         protected Integer doInBackground(Plato... platos) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            List<Plato> platosPedidos = new ArrayList<>();
+            Collections.addAll(platosPedidos,platos);
+            pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),platosPedidos);
+//            pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked());
+//            repository.insertar(pedidoConfirmar);
             return 0;
         }
 
         @Override
         protected void onPostExecute(Integer resultado) {
-
             btnConfirmar.setText("PEDIDO CONFIRMADO");
             Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
             startService(i);

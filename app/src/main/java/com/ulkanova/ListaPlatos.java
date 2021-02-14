@@ -3,32 +3,35 @@ package com.ulkanova;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ulkanova.dao.PlatoDao;
+import com.ulkanova.dao.AppRepository;
+import com.ulkanova.dao.PlatoDaoMem;
 import com.ulkanova.model.Plato;
 import com.ulkanova.model.PlatoAdapter;
 
-public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPlatoListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPlatoListener, AppRepository.OnResultCallback{
     public static final int CODIGO_PEDIDO = 777;
-    PlatoDao daoPlatos = PlatoDao.instancia;
+//    PlatoDaoMem daoPlatos = PlatoDaoMem.instancia;
     Toolbar toolbar;
     private RecyclerView recyclerView;
     private PlatoAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     boolean pedido=false;
+    AppRepository repository;
+    List<Plato> platos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +46,13 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
         recyclerView.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-//        Si pedido es verdadero, es porque se viene desde la actividad Pedido, entonces agrega botón "PEDIR"
+
+//        Si pedido es verdadero, es porque se viene desde la actividad Pedido
         pedido= getIntent().getBooleanExtra("pedido",false);
-        mAdapter = new PlatoAdapter(daoPlatos.list(),pedido,this);
-        recyclerView.setAdapter(mAdapter);
+
+        repository = new AppRepository(this.getApplication(), this);
+        repository.buscarTodos();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,9 +89,17 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
     @Override
     public void onPlatoClick(int posicion) {
         Intent iplatoElegido = new Intent();
-        iplatoElegido.putExtra("plato",daoPlatos.list().get(posicion));
+        iplatoElegido.putExtra("plato",platos.get(posicion));
         setResult(Activity.RESULT_OK,iplatoElegido);
         finish();
-//        Toast.makeText(getApplicationContext(), "PLATO: "+daoPlatos.list().get(posicion).getTitulo(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "PLATO: "+platos.get(posicion).getTitulo(),Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onResult(List result) {
+        mAdapter = new PlatoAdapter(result,pedido,this);
+        platos = result;
+        recyclerView.setAdapter(mAdapter);
     }
 }

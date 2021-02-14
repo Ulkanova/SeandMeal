@@ -1,9 +1,19 @@
 package com.ulkanova.model;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Plato implements Parcelable {
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private Long platoId;
     private String titulo;
     private String descripcion;
     private Double precio;
@@ -16,11 +26,13 @@ public class Plato implements Parcelable {
         this.calorias = calorias;
     }
 
+    @Ignore
     public Plato(String titulo, Double precio) {
         this.titulo = titulo;
         this.precio = precio;
     }
 
+    @Ignore
     public Plato(String titulo, Double precio, Integer calorias) {
         this.titulo = titulo;
         this.precio = precio;
@@ -59,7 +71,12 @@ public class Plato implements Parcelable {
         this.titulo = titulo;
     }
 
+    public Long getPlatoId() { return platoId; }
+
+    public void setPlatoId(Long id) {  this.platoId = id;  }
+
     protected Plato(Parcel in) {
+        platoId = in.readByte() == 0x00 ? null : in.readLong();
         titulo = in.readString();
         descripcion = in.readString();
         precio = in.readByte() == 0x00 ? null : in.readDouble();
@@ -73,6 +90,12 @@ public class Plato implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        if (platoId == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeLong(platoId);
+        }
         dest.writeString(titulo);
         dest.writeString(descripcion);
         if (precio == null) {

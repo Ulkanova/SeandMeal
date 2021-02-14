@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else ((EditText) v).setError(null);
                 }
-          /*     if(v.getId()==txtTarjeta.getId()){
+          /*     if(v.getPedidoId()==txtTarjeta.getPedidoId()){
                   if(!hasFocus){
                         Toast.makeText(MainActivity.this,"tama&ntilde;o: "+txtTarjeta.getTextSize(),Toast.LENGTH_SHORT);
                         if (txtTarjeta.getText().length()>0) txtCCV.setEnabled(true);

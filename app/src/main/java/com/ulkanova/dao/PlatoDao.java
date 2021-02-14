@@ -1,34 +1,83 @@
 package com.ulkanova.dao;
 
+import android.os.AsyncTask;
+
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
 import com.ulkanova.model.Plato;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public enum PlatoDao {
-   instancia;
-   List<Plato> platos = new ArrayList<>();
+@Dao
+public interface PlatoDao {
+    @Insert
+    void insertar(Plato plato);
 
-//    private PlatoDao(){}
+    @Delete
+    void borrar(Plato plato);
 
-    public List<Plato> list(){
-        if(platos.isEmpty()){        iniciar();}
-        return this.platos;
+    @Update
+    void actualizar(Plato plato);
+
+    @Query("SELECT * FROM plato WHERE platoId = :id LIMIT 1")
+    Plato buscar(String id);
+
+    @Query("SELECT * FROM plato")
+    List<Plato> buscarTodos();
+}
+
+class BuscarPlatos extends AsyncTask<String, Void, List<Plato>> {
+
+    private PlatoDao dao;
+    private OnPlatoResultCallback callback;
+
+    public BuscarPlatos(PlatoDao dao, OnPlatoResultCallback context) {
+        this.dao = dao;
+        this.callback = context;
     }
 
-    public void add(String titulo, String descripcion, Double precio, Integer calorias){
-        platos.add(new Plato(titulo, descripcion, precio, calorias));
+    @Override
+    protected List<Plato> doInBackground(String... strings) {
+        List<Plato> platos = dao.buscarTodos();
+        return platos;
     }
 
-    public void add(Plato plato){
-        platos.add(plato);
+    @Override
+    protected void onPostExecute(List<Plato> platos) {
+        super.onPostExecute(platos);
+        callback.onResult(platos);
+    }
+}
+interface OnPlatoResultCallback {
+    void onResult(List<Plato> plato);
+}
+
+class BuscarPlatoById extends AsyncTask<String, Void, Plato> {
+
+    private PlatoDao dao;
+    private OnPlatoResultCallback callback;
+
+    public BuscarPlatoById(PlatoDao dao, OnPlatoResultCallback context) {
+        this.dao = dao;
+        this.callback = context;
     }
 
-    public void iniciar(){
-        platos.add(new Plato("Empanadas","Una docena", 450.00, 1899 ));
-        platos.add(new Plato("Pizza","La clásica de muzza", 400.00, 900 ));
-        platos.add(new Plato("Milanesa al plato","Con papas fritas", 350.00, 700 ));
-        platos.add(new Plato("Pollo al horno","Con papas fritas o ensalada", 850.00, 2600 ));
-        platos.add(new Plato("Helado","Medio kilo", 250.70, 855 ));
+    @Override
+    protected Plato doInBackground(String... strings) {
+        Plato plato = dao.buscar(strings[0]);
+        return plato;
+    }
+
+    @Override
+    protected void onPostExecute(Plato plato) {
+        super.onPostExecute(plato);
+        List<Plato> lista = new ArrayList<>();
+        lista.add(plato);
+        callback.onResult(lista);
     }
 }
