@@ -17,10 +17,10 @@ public interface PedidoPlatoDao{
 
 //    @Query("INSERT INTO pedido_plato VALUES (:pedidoId,:platoId)")
 //    void insertarPorId(long pedidoId, long platoId);
-//
-//    @Transaction
-//    @Query("SELECT * FROM plato "+
-//    "INNER JOIN pedido_plato ON plato.platoId = pedido_plato.platoId "+
-//    "WHERE pedido_plato.pedidoId = :pedido")
-//    List<Plato> getPlatos(final long pedido);
+
+    @Transaction
+    @Query("SELECT * FROM plato "+
+    "INNER JOIN pedido_plato ON plato.platoId = pedido_plato.platoId "+
+    "WHERE pedido_plato.pedidoId = :pedido")
+    List<Plato> getPlatos(final long pedido);
 }

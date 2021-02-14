@@ -47,5 +47,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$rootProject.2.2.5'"
     annotationProcessor "androidx.room:room-compiler:$rootProject.2.2.5'"
     androidTestImplementation "androidx.room:room-testing:$rootProject.2.2.5'"
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 }
