@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PedidoActivity extends AppCompatActivity {//implements PedidoRepository.OnResultCallback {
+public class PedidoActivity extends AppCompatActivity implements PedidoRepository.OnResultCallback {
     public static final int CODIGO_PEDIDO = 777;
     Toolbar toolbar;
     EditText txtEmail, txtDireccion;
@@ -45,6 +45,7 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
     Plato platoSeleccionado;
     ListView listViewPedidos;
     List<Plato> pedido;
+    List<Long> idPlatos;
     Pedido pedidoConfirmar;
     ArrayList<String> platosSeleccionados;
     ArrayList<Double> preciosPlatos;
@@ -53,7 +54,7 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
     TextView lblPedido;
     String strplatos=" plato";
     Double total=0.0;
-    ConfirmarPedidoTask tarea;
+//    ConfirmarPedidoTask tarea;
     BroadcastReceiver br;
     PedidoRepository repository;
 
@@ -67,15 +68,16 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Realizar Pedido");
 
-     //   repository = new PedidoRepository(this.getApplication(), this);
+       repository = new PedidoRepository(this.getApplication(), this);
 
         crearCanal(this);
 
         platosSeleccionados = new ArrayList<String>(0);
         preciosPlatos = new ArrayList<>();
         pedido = new ArrayList<>();
+        idPlatos = new ArrayList<>();
 
-        tarea = new ConfirmarPedidoTask();
+//        tarea = new ConfirmarPedidoTask();
 
         // registro el brodcast receiver
         br = new PedidoReceiver();
@@ -130,7 +132,19 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
                 }
                 else if (v.getId()==btnConfirmar.getId()){
                     Plato[] pedidos = pedido.toArray(new Plato[0]);
-                    tarea.execute(pedido.toArray(new Plato[0]));
+//                    tarea.execute(pedido.toArray(new Plato[0]));
+                    Toast.makeText(getApplicationContext(),"Su pedido está siendo procesado...",Toast.LENGTH_SHORT).show();
+                    btnConfirmar.setEnabled(false); //Se inhabilita para evitar java.lang.IllegalStateException al disparar el mismo hilo más de una vez
+
+                    platosSeleccionados.clear();
+                    preciosPlatos.clear();
+                    total=0.0;
+                    lblPedido.setText("Mi Pedido");
+                    lblTotal.setText("Total: $"+total);
+                    adapterLista.clear();
+                    pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),pedido);
+                    repository.insertar(pedidoConfirmar,idPlatos);
+                    pedido.clear();
                 }
             }
         };
@@ -146,6 +160,7 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
             if (requestCode == CODIGO_PEDIDO) {
                 platoSeleccionado = data.getExtras().getParcelable("plato");
                 pedido.add(platoSeleccionado);
+                idPlatos.add(platoSeleccionado.getPlatoId());
                 adapterLista.add(platoSeleccionado.getTitulo()+"\t $ "+platoSeleccionado.getPrecio());
                 preciosPlatos.add(platoSeleccionado.getPrecio());
                 total = total + platoSeleccionado.getPrecio();
@@ -172,43 +187,36 @@ public class PedidoActivity extends AppCompatActivity {//implements PedidoReposi
         }
     }
 
-//    @Override
-//    public void onResult(List result) {
-//        btnConfirmar.setText("PEDIDO CONFIRMADO");
-//        Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
-//        startService(i);
-//    }
-
-    class ConfirmarPedidoTask extends AsyncTask<Plato,Integer, Integer>{
-
-        @Override
-        protected void onPreExecute() {
-            Toast.makeText(getApplicationContext(),"Su pedido está siendo procesado...",Toast.LENGTH_SHORT).show();
-            btnConfirmar.setEnabled(false); //Se inhabilita para evitar java.lang.IllegalStateException al disparar el mismo hilo más de una vez
-            pedido.clear();
-            platosSeleccionados.clear();
-            preciosPlatos.clear();
-            total=0.0;
-            lblPedido.setText("Mi Pedido");
-            lblTotal.setText("Total: $"+total);
-            adapterLista.clear();
-        }
-
-        @Override
-        protected Integer doInBackground(Plato... platos) {
-            List<Plato> platosPedidos = new ArrayList<>();
-            Collections.addAll(platosPedidos,platos);
-            pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),platosPedidos);
-//            pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked());
-//            repository.insertar(pedidoConfirmar);
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer resultado) {
-            btnConfirmar.setText("PEDIDO CONFIRMADO");
-            Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
-            startService(i);
-        }
+    @Override
+    public void onResult(List result) {
+        Toast.makeText(this, "Exito! ", Toast.LENGTH_SHORT).show();
+        btnConfirmar.setText("PEDIDO CONFIRMADO");
+        Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
+        startService(i);
     }
+
+//    class ConfirmarPedidoTask extends AsyncTask<Plato,Integer, Integer>{
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//
+//        @Override
+//        protected Integer doInBackground(Plato... platos) {
+////            List<Plato> platosPedidos = new ArrayList<>();
+////            Collections.addAll(platosPedidos,platos);
+////            pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),platosPedidos);
+//
+//            return 0;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Integer resultado) {
+////            btnConfirmar.setText("PEDIDO CONFIRMADO");
+////            Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
+////            startService(i);
+//            finish();
+//        }
+//    }
 }

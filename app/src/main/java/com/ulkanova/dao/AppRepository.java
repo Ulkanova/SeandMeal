@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ulkanova.model.Plato;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppRepository implements OnPlatoResultCallback {
@@ -24,6 +25,7 @@ public class AppRepository implements OnPlatoResultCallback {
                 platoDao.insertar(plato);
             }
         });
+        callback.onResult(new ArrayList());
     }
 
     public void borrar(final Plato plato){
@@ -42,6 +44,7 @@ public class AppRepository implements OnPlatoResultCallback {
                 platoDao.actualizar(plato);
             }
         });
+
     }
 
     public void buscar(String id) {

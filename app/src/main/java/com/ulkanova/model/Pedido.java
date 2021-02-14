@@ -11,7 +11,7 @@ import java.util.List;
 public class Pedido {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private long pedidoId;
+    private int pedidoId;
     private String email;
     private String direccion;
     private boolean delivery;
@@ -47,9 +47,9 @@ public class Pedido {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-    public Long getPedidoId() { return pedidoId; }
+    public int getPedidoId() { return pedidoId; }
 
-    public void setPedidoId(Long pedidoId) {  this.pedidoId = pedidoId;  }
+    public void setPedidoId(int pedidoId) {  this.pedidoId = pedidoId;  }
 
     public boolean isDelivery() {
         return delivery;
@@ -67,11 +67,11 @@ public class Pedido {
         this.platos = platos;
     }
 
-    public long getId() {
-        return pedidoId;
-    }
-
-    public void setId(long id) {
-        this.pedidoId = id;
-    }
+//    public long getId() {
+//        return pedidoId;
+//    }
+//
+//    public void setId(int id) {
+//        this.pedidoId = id;
+//    }
 }

@@ -17,44 +17,40 @@ import java.util.List;
 
 @Dao
 public interface PedidoDao {
-//    @Insert
-//    void insertar(Pedido pedido);
+    @Insert
+    long insertar(Pedido pedido);
+
+    @Delete
+    void borrar(Pedido pedido);
+
+    @Update
+    void actualizar(Pedido pedido);
 //
-//    @Delete
-//    void borrar(Pedido pedido);
-//
-//    @Update
-//    void actualizar(Pedido pedido);
-//
-//    @Query("SELECT * FROM pedido WHERE pedidoId = :id LIMIT 1")
-//    Pedido buscarPedido(String id);
-//
-//    @Query("SELECT * FROM pedido")
-//    List<Pedido> buscarTodos();
-//
-//
-////    @Transaction
-////    @Query("SELECT * FROM pedido_plato WHERE pedidoId=:pedidoId")
-////    List<Plato> getPlatos(String pedidoId);
-//
-////    @Transaction
-////    @Query("SELECT * FROM pedido_plato WHERE pedidoId =:pedidoId")
-////    List<Plato> getPlatos(String pedidoId);
-//}
-//
+    @Query("SELECT * FROM pedido WHERE pedidoId = :id LIMIT 1")
+    Pedido buscarPedido(String id);
+
+//    @Transaction
+//    @Query("SELECT * FROM pedido_plato WHERE pedidoId=:pedidoId")
+//    List<Plato> getPlatos(String pedidoId);
+
+    @Transaction
+    @Query("SELECT * FROM pedido_plato WHERE pedidoId =:pedidoId")
+    List<Plato> getPlatos(String pedidoId);
+}
+
 //class BuscarPedido extends AsyncTask<String, Void, Pedido> {
 //
-//    private PedidoConPlatosDao dao;
+//    private PedidoPlatoDao dao;
 //    private OnPedidoResultCallback callback;
 //
-//    public BuscarPedido(PedidoConPlatosDao dao, OnPedidoResultCallback context) {
+//    public BuscarPedido(PedidoPlatoDao dao, OnPedidoResultCallback context) {
 //        this.dao = dao;
 //        this.callback = context;
 //    }
 //
 //    @Override
-//    protected Pedido doInBackground(String... strings) {
-//        Pedido pedido = dao.buscarPedido(strings[0]);
+//    protected Pedido doInBackground(Integer id) {
+//        Pedido pedido = new Pedido( dao.getPlatos(id));
 //        return pedido;
 //    }
 //
@@ -64,7 +60,7 @@ public interface PedidoDao {
 //        callback.onResult(pedido);
 //    }
 //}
-//interface OnPedidoResultCallback {
-//    void onResult(Pedido pedido);
-//}
+interface OnPedidoResultCallback {
+    void onResult(List<Pedido> pedido);
 }
+//}

@@ -62,7 +62,7 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
                         txtTitulo.getText().clear();
                         repository.insertar(plato);
 
-                        Toast.makeText(getApplicationContext(),plato.getTitulo()+" se ha guardado correctamente",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),plato.getTitulo()+" se ha guardado correctamente",Toast.LENGTH_SHORT).show();
                     }
                     catch (Exception e){
                         e.printStackTrace();
@@ -99,6 +99,7 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
 
     @Override
     public void onResult(List result) {
-        Toast.makeText(this, "Exito! "+result.get(0).toString(), Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, "Exito! ", Toast.LENGTH_SHORT).show();
     }
 }

@@ -31,6 +31,8 @@ public interface PlatoDao {
     List<Plato> buscarTodos();
 }
 
+
+
 class BuscarPlatos extends AsyncTask<String, Void, List<Plato>> {
 
     private PlatoDao dao;

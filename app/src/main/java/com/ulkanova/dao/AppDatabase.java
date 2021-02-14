@@ -16,11 +16,11 @@ import com.ulkanova.model.Plato;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Plato.class}, version = 4)
+@Database(entities = {Plato.class, Pedido.class, PedidoPlato.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract PlatoDao platoDao();
     public abstract PedidoDao pedidoDao();
-    public abstract PedidoConPlatosDao pedidoConPlatosDao();
+//    public abstract PedidoConPlatosDao pedidoConPlatosDao();
     public abstract PedidoPlatoDao pedidoPlatosDao();
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 1;
