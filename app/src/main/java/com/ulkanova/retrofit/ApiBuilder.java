@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiBuilder {
     private PlatoService platoService;
+    private PedidoService pedidoService;
     private static ApiBuilder _INSTANCIA;
 
     private void iniciarRetrofit(){
@@ -21,11 +22,17 @@ public class ApiBuilder {
                 .build();
 //        categoriaRest =retrofit.create(CategoriaDAORest.class);
         platoService =retrofit.create(PlatoService.class);
+        pedidoService = retrofit.create(PedidoService.class);
     }
 
     public PlatoService getPlatoService() {
         if(platoService==null) this.iniciarRetrofit();
         return platoService;
+    }
+
+    public PedidoService getPedidoService() {
+        if(pedidoService==null) this.iniciarRetrofit();
+        return pedidoService;
     }
 
     public static ApiBuilder getInstance(){

@@ -101,15 +101,17 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
     public void onPlatoClick(int posicion) {
         Intent iplatoElegido = new Intent();
         iplatoElegido.putExtra("plato",platos.get(posicion));
+        Log.d("PEDIDO", "onPlatoClick: "+platos.get(posicion).getPlatoId() + " "+platos.get(posicion));
         setResult(Activity.RESULT_OK,iplatoElegido);
         finish();
         Toast.makeText(getApplicationContext(), "PLATO: "+platos.get(posicion).getTitulo(),Toast.LENGTH_SHORT).show();
     }
 
-
+//SOLO USADO CUANDO SE CONSUME LA BD
     @Override
     public void onResult(List result) {
         mAdapter = new PlatoAdapter(result,pedido,this);
+        Log.d("PEDIDO RESULT", " EN LISTA PLATOS onResult: "+result);
         platos = result;
         recyclerView.setAdapter(mAdapter);
     }
@@ -123,12 +125,17 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d("PLATO", "MENSAJE RECIBIDO ");
             ListaPlatos activity = mActivity.get();
             if (activity != null) {
                 Bundle data = msg.getData();
 //                ArrayList<Plato> losPlatos = data.getParcelableArrayList("plato");
                 activity.platos.addAll(data.getParcelableArrayList("plato"));
+                String todosPlatos = "";
+                for (int i=0; i<activity.platos.size();i++) todosPlatos+=activity.platos.get(i).getTitulo()+ ", ";
+                String platosID = "";
+                for (int i=0; i<activity.platos.size();i++) platosID+=activity.platos.get(i).getPlatoId()+" , ";
+                Log.d("PEDIDO PRIMER PLATO", "PLATOS DESDE API: "+todosPlatos);
+                Log.d("PEDIDO PRIMER PLATO", "IDS DESDE API: "+platosID);
                 activity.mAdapter = new PlatoAdapter(activity.platos,activity.pedido,activity);
                 activity.recyclerView.setAdapter(mAdapter);
             }

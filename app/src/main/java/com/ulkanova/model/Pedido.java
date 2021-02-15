@@ -6,14 +6,18 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import retrofit2.http.Field;
 
 @Entity
 public class Pedido {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @Expose
+    @SerializedName(value="id")
     private int pedidoId;
     @Expose
     private String email;

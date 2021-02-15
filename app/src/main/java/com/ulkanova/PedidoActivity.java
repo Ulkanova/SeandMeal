@@ -14,6 +14,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,7 +32,9 @@ import com.ulkanova.dao.AppRepository;
 import com.ulkanova.dao.PedidoRepository;
 import com.ulkanova.model.Pedido;
 import com.ulkanova.model.Plato;
+import com.ulkanova.retrofit.PedidoRepositoryApi;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +62,9 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
 //    ConfirmarPedidoTask tarea;
     BroadcastReceiver br;
     PedidoRepository repository;
+    PedidoRepositoryApi repositoryApi;
+    boolean retorno;
+    private final PedidoActivity.MyPedidoHandler mHandler = new PedidoActivity.MyPedidoHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
         actionBar.setTitle("Realizar Pedido");
 
        repository = new PedidoRepository(this.getApplication(), this);
+       repositoryApi = new PedidoRepositoryApi();
 
         crearCanal(this);
 
@@ -131,11 +140,10 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
                     startActivityForResult(addPedidoIntent,CODIGO_PEDIDO);
                 }
                 else if (v.getId()==btnConfirmar.getId()){
-                    Plato[] pedidos = pedido.toArray(new Plato[0]);
+              //      Plato[] pedidos = pedido.toArray(new Plato[0]);
 //                    tarea.execute(pedido.toArray(new Plato[0]));
                     Toast.makeText(getApplicationContext(),"Su pedido está siendo procesado...",Toast.LENGTH_SHORT).show();
                     btnConfirmar.setEnabled(false); //Se inhabilita para evitar java.lang.IllegalStateException al disparar el mismo hilo más de una vez
-
                     platosSeleccionados.clear();
                     preciosPlatos.clear();
                     total=0.0;
@@ -143,8 +151,14 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
                     lblTotal.setText("Total: $"+total);
                     adapterLista.clear();
                     pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),pedido);
-                    repository.insertar(pedidoConfirmar,idPlatos);
-                    pedido.clear();
+                    Log.d("PEDIDO A INSERTAR", "PLATOS: "+pedido.size() + " PLATO ID: "+pedido.get(0).getPlatoId());
+                    //Inserción por API
+                    repositoryApi.insertar(pedidoConfirmar,mHandler);
+                    //Inserción por BD
+                    //repository.insertar(pedidoConfirmar,idPlatos);
+
+
+                //    pedido.clear();
                 }
             }
         };
@@ -159,6 +173,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CODIGO_PEDIDO) {
                 platoSeleccionado = data.getExtras().getParcelable("plato");
+                Log.d("PEDIDO", "Plato agregado al pedido: id: "+platoSeleccionado.getPlatoId()+ " plato: "+platoSeleccionado);
                 pedido.add(platoSeleccionado);
                 idPlatos.add(platoSeleccionado.getPlatoId());
                 adapterLista.add(platoSeleccionado.getTitulo()+"\t $ "+platoSeleccionado.getPrecio());
@@ -195,6 +210,30 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
         startService(i);
     }
 
+    private static class MyPedidoHandler extends Handler {
+        private final WeakReference<PedidoActivity> mActivity;
+
+        public MyPedidoHandler(PedidoActivity activity) {
+            mActivity = new WeakReference<PedidoActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("PEDIDO", "MENSAJE RECIBIDO ");
+            PedidoActivity activity = mActivity.get();
+            if (activity != null) {
+                Bundle data = msg.getData();
+                activity.retorno = data.getBoolean("insertado");
+                if (!activity.retorno) {
+                    Toast.makeText(activity, "No se ha podido crear el pedido. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(activity, "Pedido creado correctamente", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+    }
 //    class ConfirmarPedidoTask extends AsyncTask<Plato,Integer, Integer>{
 //
 //        @Override

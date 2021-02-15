@@ -1,14 +1,10 @@
 package com.ulkanova.retrofit;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.ulkanova.dao.AppDatabase;
-import com.ulkanova.dao.AppRepository;
-import com.ulkanova.dao.PlatoDao;
 import com.ulkanova.model.Plato;
 
 import java.util.ArrayList;
@@ -87,26 +83,31 @@ public class PlatoRepositoryApi{
                         Log.d("PLATO", "Call: "+call.request().url());
                         Log.d("PLATO", "Retorno: "+response.code());
                         if (!response.isSuccessful()) {
-                            Log.d("PLATO", "Retorno Fallido");
+                            Log.d("PLATO", "Retorno Fallido1");
+                            Log.d("PLATO", "Retorno: "+response.code());
                             return;
                         }
                         datos.putParcelableArrayList("plato",(ArrayList<Plato>) response.body());
+                        String platosID = "";
+                        String todosPlatos = "";
+                        List<Plato> platos = new ArrayList<>();
+                        platos.addAll(datos.getParcelableArrayList("plato"));
+                        for (int i=0; i<platos.size();i++) platosID+=platos.get(i).getPlatoId()+ ", ";
+
+                      for (int i=0; i<platos.size();i++) todosPlatos+=platos.get(i).getTitulo()+ ", ";
+                        Log.d("PEDIDO EN REPOSITORY", "PLATOS DESDE API: "+todosPlatos);
+                        Log.d("PEDIDO PRIMER PLATO", "IDS DESDE API: "+platosID);
                         msg.setData(datos);
                         h.sendMessage(msg);
                     }
                     @Override
                     public void onFailure(Call<List<Plato>> call, Throwable t) {
-                        Log.d("PLATO", "Retorno Fallido");
+                        Log.d("PLATO", "Retorno Fallido2");
                     }
                 }
         );
     }
 
-//    @Override
-//    public void onResult(List<Plato> platos) {
-//
-//        callback.onResult(platos);
-//    }
 
     public interface OnResultCallback<T> {
         void onResult(List<T> result);
