@@ -1,4 +1,4 @@
-package com.ulkanova.dao;
+package com.ulkanova.memoria;
 
 import com.ulkanova.model.Plato;
 

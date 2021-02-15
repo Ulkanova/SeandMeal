@@ -5,17 +5,24 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 @Entity
 public class Pedido {
     @PrimaryKey(autoGenerate = true)
     @NonNull
+    @Expose
     private int pedidoId;
+    @Expose
     private String email;
+    @Expose
     private String direccion;
+    @Expose
     private boolean delivery;
     @Ignore
+    @Expose
     private List<Plato> platos;
 
     @Ignore

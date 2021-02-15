@@ -5,8 +5,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +17,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ulkanova.dao.AppRepository;
-import com.ulkanova.dao.PlatoDao;
-import com.ulkanova.dao.PlatoDaoMem;
+import com.ulkanova.dao.PedidoRepository;
+import com.ulkanova.memoria.PlatoDaoMem;
 import com.ulkanova.model.Plato;
+import com.ulkanova.model.PlatoAdapter;
+import com.ulkanova.retrofit.PlatoRepositoryApi;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 
@@ -27,7 +32,10 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
     Button guardar;
     EditText txtTitulo, txtPrecio, txtDescripcion, txtCalorias;
     PlatoDaoMem platosMem = PlatoDaoMem.instancia;
-    AppRepository repository;
+    private final NuevoPlato.MyPlatoHandler mHandler = new NuevoPlato.MyPlatoHandler(this);
+//    AppRepository repository;
+    PlatoRepositoryApi respositorioApi;
+    boolean retorno;
 
 
     @Override
@@ -45,7 +53,8 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
         txtDescripcion=findViewById(R.id.txtDescripcion);
         txtPrecio=findViewById(R.id.txtPrecio);
 
-        repository = new AppRepository(this.getApplication(), this);
+//        repository = new AppRepository(this.getApplication(), this);
+        respositorioApi = new PlatoRepositoryApi();
 
         View.OnClickListener listenerClick  = new View.OnClickListener() {
             @Override
@@ -60,7 +69,7 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
                         txtCalorias.getText().clear();
                         txtPrecio.getText().clear();
                         txtTitulo.getText().clear();
-                        repository.insertar(plato);
+                        respositorioApi.insertar(plato, mHandler);
 
 //                        Toast.makeText(getApplicationContext(),plato.getTitulo()+" se ha guardado correctamente",Toast.LENGTH_SHORT).show();
                     }
@@ -90,6 +99,31 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
         return super.onOptionsItemSelected(item);
     }
 
+    private static class MyPlatoHandler extends Handler {
+        private final WeakReference<NuevoPlato> mActivity;
+
+        public MyPlatoHandler(NuevoPlato activity) {
+            mActivity = new WeakReference<NuevoPlato>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("PLATO", "MENSAJE RECIBIDO ");
+            NuevoPlato activity = mActivity.get();
+            if (activity != null) {
+                Bundle data = msg.getData();
+//                ArrayList<Plato> losPlatos = data.getParcelableArrayList("plato");
+                activity.retorno = data.getBoolean("insertado");
+                if (!activity.retorno) {
+                    Toast.makeText(activity, "No se ha podido crear el plato. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(activity, "Plato creado correctamente", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+    }
 
 
     private boolean vacio (EditText campo){

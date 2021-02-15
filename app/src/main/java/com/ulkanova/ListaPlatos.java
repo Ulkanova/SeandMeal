@@ -3,6 +3,10 @@ package com.ulkanova;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,22 +19,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ulkanova.dao.AppRepository;
-import com.ulkanova.dao.PlatoDaoMem;
 import com.ulkanova.model.Plato;
 import com.ulkanova.model.PlatoAdapter;
+import com.ulkanova.retrofit.PlatoRepositoryApi;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPlatoListener, AppRepository.OnResultCallback{
     public static final int CODIGO_PEDIDO = 777;
 //    PlatoDaoMem daoPlatos = PlatoDaoMem.instancia;
+    private final MyPlatoHandler mHandler = new MyPlatoHandler(this);
     Toolbar toolbar;
     private RecyclerView recyclerView;
-    private PlatoAdapter mAdapter;
+    private static PlatoAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     boolean pedido=false;
     AppRepository repository;
+    PlatoRepositoryApi respositorioApi;
     List<Plato> platos = new ArrayList<>();
 
     @Override
@@ -50,8 +57,12 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
 //        Si pedido es verdadero, es porque se viene desde la actividad Pedido
         pedido= getIntent().getBooleanExtra("pedido",false);
 
-        repository = new AppRepository(this.getApplication(), this);
-        repository.buscarTodos();
+        respositorioApi = new PlatoRepositoryApi();
+        respositorioApi.buscarTodos(mHandler);
+
+
+//        repository = new AppRepository(this.getApplication(), this);
+//        repository.buscarTodos();
     }
 
     @Override
@@ -101,5 +112,26 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
         mAdapter = new PlatoAdapter(result,pedido,this);
         platos = result;
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private static class MyPlatoHandler extends Handler {
+        private final WeakReference<ListaPlatos> mActivity;
+
+        public MyPlatoHandler(ListaPlatos activity) {
+            mActivity = new WeakReference<ListaPlatos>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("PLATO", "MENSAJE RECIBIDO ");
+            ListaPlatos activity = mActivity.get();
+            if (activity != null) {
+                Bundle data = msg.getData();
+//                ArrayList<Plato> losPlatos = data.getParcelableArrayList("plato");
+                activity.platos.addAll(data.getParcelableArrayList("plato"));
+                activity.mAdapter = new PlatoAdapter(activity.platos,activity.pedido,activity);
+                activity.recyclerView.setAdapter(mAdapter);
+            }
+        }
     }
 }

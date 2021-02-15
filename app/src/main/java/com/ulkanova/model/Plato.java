@@ -9,14 +9,21 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Plato implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     @NonNull
+    @Expose
     private Long platoId;
+    @Expose
     private String titulo;
+    @Expose
     private String descripcion;
+    @Expose
     private Double precio;
+    @Expose
     private Integer calorias;
 
     public Plato(String titulo, String descripcion, Double precio, Integer calorias) {
