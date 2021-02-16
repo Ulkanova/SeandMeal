@@ -1,5 +1,8 @@
 package com.ulkanova.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.ulkanova.R;
 
 import java.util.List;
@@ -46,8 +53,35 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.PlatoViewHol
         String precioVisual = "$ "+platos.getPrecio().toString();
         holder.lblPrecio.setText(precioVisual);
         if (pedir) holder.btnPedir.setVisibility(View.VISIBLE);
+        Log.d("PLATOHOLDER", "plato.getImagen: "+platos.getImagen());
+        if (!(platos.getImagen()==null)) {
+            cargarImagen(holder);
+        }
 
     }
+
+    private void cargarImagen(PlatoViewHolder holder) {
+            // Creamos una referencia al storage con la Uri de la img
+        Bitmap bitmap;
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference gsReference = storage.getReferenceFromUrl("gs://send-meal-305000.appspot.com/images/plato_id.jpg");
+
+            final long THREE_MEGABYTE = 3 * 1024 * 1024;
+            gsReference.getBytes(THREE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    // Exito
+                    Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    holder.imagenPlato.setImageBitmap(bm);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Error - Carga una imagen por defecto
+                }
+            });
+    }
+
 
     @Override
     public int getItemCount() {
@@ -64,7 +98,7 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.PlatoViewHol
 
         public PlatoViewHolder(@NonNull View v, OnPlatoListener onPlatoListener) {
             super(v);
-            imagenPlato = v.findViewById(R.id.imagenPlatoFoto);
+            imagenPlato = v.findViewById(R.id.imagenPlato);
             lblPlato = v.findViewById(R.id.lblPlato);
             lblPrecio = v.findViewById(R.id.lblPrecio);
             btnPedir = v.findViewById(R.id.btnPedir);

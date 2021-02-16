@@ -154,7 +154,7 @@ public class NuevoPlato extends AppCompatActivity implements AppRepository.OnRes
         startActivityForResult(camaraIntent, CAMARA_REQUEST);
     }
 
-   
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
