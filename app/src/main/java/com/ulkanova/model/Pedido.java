@@ -14,11 +14,11 @@ import retrofit2.http.Field;
 
 @Entity
 public class Pedido {
-    @PrimaryKey(autoGenerate = true)
+   @PrimaryKey//(autoGenerate = true)
     @NonNull
     @Expose
     @SerializedName(value="id")
-    private int pedidoId;
+    private String pedidoId;
     @Expose
     private String email;
     @Expose
@@ -58,9 +58,9 @@ public class Pedido {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-    public int getPedidoId() { return pedidoId; }
+    public String getPedidoId() { return pedidoId; }
 
-    public void setPedidoId(int pedidoId) {  this.pedidoId = pedidoId;  }
+    public void setPedidoId(String pedidoId) {  this.pedidoId = pedidoId;  }
 
     public boolean isDelivery() {
         return delivery;

@@ -50,7 +50,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
     Plato platoSeleccionado;
     ListView listViewPedidos;
     List<Plato> pedido;
-    List<Long> idPlatos;
+    List<String> idPlatos;
     Pedido pedidoConfirmar;
     ArrayList<String> platosSeleccionados;
     ArrayList<Double> preciosPlatos;
@@ -143,28 +143,36 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
               //      Plato[] pedidos = pedido.toArray(new Plato[0]);
 //                    tarea.execute(pedido.toArray(new Plato[0]));
                     Toast.makeText(getApplicationContext(),"Su pedido está siendo procesado...",Toast.LENGTH_SHORT).show();
-                    btnConfirmar.setEnabled(false); //Se inhabilita para evitar java.lang.IllegalStateException al disparar el mismo hilo más de una vez
-                    platosSeleccionados.clear();
-                    preciosPlatos.clear();
-                    total=0.0;
-                    lblPedido.setText("Mi Pedido");
-                    lblTotal.setText("Total: $"+total);
-                    adapterLista.clear();
+                    limpiarPedido();
                     pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),pedido);
-                    Log.d("PEDIDO A INSERTAR", "PLATOS: "+pedido.size() + " PLATO ID: "+pedido.get(0).getPlatoId());
                     //Inserción por API
                     repositoryApi.insertar(pedidoConfirmar,mHandler);
                     //Inserción por BD
                     //repository.insertar(pedidoConfirmar,idPlatos);
 
 
-                //    pedido.clear();
+                //
                 }
             }
         };
 
         btnConfirmar.setOnClickListener(listenerClick);
         addPedido.setOnClickListener(listenerClick);
+    }
+
+    public void limpiarPedido() {
+        txtEmail.setText("");
+        txtDireccion.setText("");
+        btnTakeAway.setChecked(false);
+        btnDelivery.setChecked(false);
+        btnConfirmar.setEnabled(false); //Se inhabilita para evitar java.lang.IllegalStateException al disparar el mismo hilo más de una vez
+        platosSeleccionados.clear();
+        preciosPlatos.clear();
+        total=0.0;
+        lblPedido.setText("Mi Pedido");
+        lblTotal.setText("Total: $"+total);
+        pedido.clear();
+        adapterLista.clear();
     }
 
     @Override
@@ -204,10 +212,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
 
     @Override
     public void onResult(List result) {
-        Toast.makeText(this, "Exito! ", Toast.LENGTH_SHORT).show();
-        btnConfirmar.setText("PEDIDO CONFIRMADO");
-        Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
-        startService(i);
+        notificar();
     }
 
     private static class MyPedidoHandler extends Handler {
@@ -229,10 +234,19 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
                 }
                 else {
                     Toast.makeText(activity, "Pedido creado correctamente", Toast.LENGTH_SHORT).show();
+                    activity.limpiarPedido();
+                    activity.notificar();
+
                 }
 
             }
         }
+    }
+
+    private void notificar() {
+        btnConfirmar.setText("PEDIDO CONFIRMADO");
+        Intent i = new Intent(getApplicationContext(),MyIntentServices.class);
+        startService(i);
     }
 //    class ConfirmarPedidoTask extends AsyncTask<Plato,Integer, Integer>{
 //

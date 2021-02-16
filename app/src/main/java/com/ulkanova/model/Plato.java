@@ -14,11 +14,11 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class Plato implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
+  @PrimaryKey//(autoGenerate = true)
     @NonNull
     @Expose
     @SerializedName(value="id")
-    private Long platoId;
+    private String platoId;
     @Expose
     private String titulo;
     @Expose
@@ -80,12 +80,12 @@ public class Plato implements Parcelable {
         this.titulo = titulo;
     }
 
-    public Long getPlatoId() { return platoId; }
+    public String getPlatoId() { return platoId; }
 
-    public void setPlatoId(Long id) {  this.platoId = id;  }
+    public void setPlatoId(String id) {  this.platoId = id;  }
 
     protected Plato(Parcel in) {
-        platoId = in.readByte() == 0x00 ? null : in.readLong();
+        platoId = in.readString();
         titulo = in.readString();
         descripcion = in.readString();
         precio = in.readByte() == 0x00 ? null : in.readDouble();
@@ -99,12 +99,13 @@ public class Plato implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (platoId == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeLong(platoId);
-        }
+//        if (platoId == null) {
+//            dest.writeByte((byte) (0x00));
+//        } else {
+//            dest.writeByte((byte) (0x01));
+//            dest.writeLong(platoId);
+//        }
+        dest.writeString(platoId);
         dest.writeString(titulo);
         dest.writeString(descripcion);
         if (precio == null) {

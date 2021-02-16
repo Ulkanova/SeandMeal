@@ -22,20 +22,16 @@ public class PedidoRepositoryApi {
     public PedidoRepositoryApi(){
         pedidoService = apiBuilder.getInstance().getPedidoService();
     }
-///////////////////
+
     public void insertar(final Pedido pedido, final Handler h){
         final Message msg = h.obtainMessage();
         final Bundle retorno = new Bundle();
         Call<Pedido> callPedido = pedidoService.createPedido(pedido);
-        Log.d("PEDIDO", "Insertando pedido email: "+pedido.getEmail());
-        Log.d("PLATOS DEL PEDIDO", "Platos: "+pedido.getPlatos().get(0).getPlatoId());
         callPedido.enqueue(
                 new Callback<Pedido>() {
                     @Override
                     public void onResponse(Call<Pedido> call, Response<Pedido> response) {
                         if (!response.isSuccessful()) {
-                            Log.d("PEDIDO", "Retorno Fallido1");
-                            Log.d("PEDIDO", "RESPUESTA: "+response.code());
                             retorno.putBoolean("insertado",false);
                             msg.setData(retorno);
                             h.sendMessage(msg);
@@ -44,13 +40,9 @@ public class PedidoRepositoryApi {
                         retorno.putBoolean("insertado",true);
                         msg.setData(retorno);
                         h.sendMessage(msg);
-                        Log.d("PEDIDO", "RESPUESTA: "+response.code());
-                        Log.d("PEDIDO", "INSERCION: "+response.body());
                     }
                     @Override
                     public void onFailure(Call<Pedido> call, Throwable t) {
-                        Log.d("PEDIDO", "Retorno Fallido2");
-                        Log.d("PEDIDO", "Retorno Fallido2: "+ t.getMessage());
                         retorno.putBoolean("insertado",false);
                         msg.setData(retorno);
                         h.sendMessage(msg);
