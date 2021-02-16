@@ -75,10 +75,7 @@ public class PedidoRepositoryApi {
                 new Callback<List<Pedido>>() {
                     @Override
                     public void onResponse(Call<List<Pedido>> call, Response<List<Pedido>> response) {
-                        Log.d("PLATO", "Call: "+call.request().url());
-                        Log.d("PLATO", "Retorno: "+response.code());
                         if (!response.isSuccessful()) {
-                            Log.d("PEDIDO", "Retorno Fallido");
                             return;
                         }
                     //    datos.putParcelableArrayList("pedido",(ArrayList<Pedido>) response.body());
@@ -87,7 +84,6 @@ public class PedidoRepositoryApi {
                     }
                     @Override
                     public void onFailure(Call<List<Pedido>> call, Throwable t) {
-                        Log.d("Pedido", "Retorno Fallido");
                     }
                 }
         );
