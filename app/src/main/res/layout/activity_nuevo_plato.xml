@@ -17,20 +17,42 @@
         android:hint="@string/nuevo_plato"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-    <EditText
-        android:id="@+id/txtTitulo"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/titulo" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:hint="@string/titulo"
+            android:inputType="textPersonName" />
+
+        <ImageButton
+            android:id="@+id/btnCamara"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minWidth="16dp"
+            android:theme="@style/Theme.SeandMeal"
+            app:srcCompat="@drawable/baseline_photo_camera_white_24dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imagenPlatoFoto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        tools:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
         android:id="@+id/lblDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
         android:hint="@string/descripcion"
+        android:paddingTop="30dp"
         android:textSize="18sp" />
 
     <EditText
@@ -53,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="numberDecimal"
-            android:hint="@string/precio" />
+            android:hint="@string/precio"
+            android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/txtCalorias"
@@ -62,8 +84,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="number"
-            android:hint="@string/calorias" />
+            android:hint="@string/calorias"
+            android:inputType="number" />
     </LinearLayout>
 
     <Button
@@ -71,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="@string/guardar"
         android:backgroundTint="@color/purple_500"
-        android:textColor="@color/white"/>
+        android:text="@string/guardar"
+        android:textColor="@color/white" />
 </LinearLayout>

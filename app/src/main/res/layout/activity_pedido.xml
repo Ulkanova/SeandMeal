@@ -26,9 +26,9 @@
 
         <EditText
             android:id="@+id/txtDireccionEnvio"
-            android:layout_width="354dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="9"
             android:ems="10"
             android:hint="Dirección de envío"
             android:inputType="textPersonName" />

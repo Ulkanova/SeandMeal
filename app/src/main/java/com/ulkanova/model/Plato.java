@@ -28,11 +28,32 @@ public class Plato implements Parcelable {
     @Expose
     private Integer calorias;
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    @Expose
+    private String imagen;
+
+    public Plato(String titulo, String descripcion, Double precio, Integer calorias, String imagen) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.calorias = calorias;
+        this.imagen = imagen;
+    }
+
+    @Ignore
     public Plato(String titulo, String descripcion, Double precio, Integer calorias) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.precio = precio;
         this.calorias = calorias;
+
     }
 
     @Ignore

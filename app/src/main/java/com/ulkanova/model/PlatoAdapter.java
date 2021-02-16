@@ -1,19 +1,15 @@
 package com.ulkanova.model;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ulkanova.PedidoActivity;
 import com.ulkanova.R;
 
 import java.util.List;
@@ -68,7 +64,7 @@ public class PlatoAdapter extends RecyclerView.Adapter<PlatoAdapter.PlatoViewHol
 
         public PlatoViewHolder(@NonNull View v, OnPlatoListener onPlatoListener) {
             super(v);
-            imagenPlato = v.findViewById(R.id.imagenPlato);
+            imagenPlato = v.findViewById(R.id.imagenPlatoFoto);
             lblPlato = v.findViewById(R.id.lblPlato);
             lblPrecio = v.findViewById(R.id.lblPrecio);
             btnPedir = v.findViewById(R.id.btnPedir);
