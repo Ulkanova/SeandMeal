@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPlatoListener, AppRepository.OnResultCallback{
-    public static final int CODIGO_PEDIDO = 777;
+//    public static final int CODIGO_PEDIDO = 777;
 //    PlatoDaoMem daoPlatos = PlatoDaoMem.instancia;
     private final MyPlatoHandler mHandler = new MyPlatoHandler(this);
     Toolbar toolbar;
@@ -101,10 +101,9 @@ public class ListaPlatos extends AppCompatActivity implements PlatoAdapter.OnPla
     public void onPlatoClick(int posicion) {
         Intent iplatoElegido = new Intent();
         iplatoElegido.putExtra("plato",platos.get(posicion));
-        Log.d("PEDIDO", "onPlatoClick: "+platos.get(posicion).getPlatoId() + " "+platos.get(posicion));
         setResult(Activity.RESULT_OK,iplatoElegido);
         finish();
-        Toast.makeText(getApplicationContext(), "PLATO: "+platos.get(posicion).getTitulo(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Plato Seleccionado: "+platos.get(posicion).getTitulo(),Toast.LENGTH_SHORT).show();
     }
 
 //SOLO USADO CUANDO SE CONSUME LA BD

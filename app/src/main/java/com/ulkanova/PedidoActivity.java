@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,14 +25,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ulkanova.dao.AppRepository;
 import com.ulkanova.dao.PedidoRepository;
+import com.ulkanova.maps.PermissionUtils;
 import com.ulkanova.model.Pedido;
 import com.ulkanova.model.Plato;
 import com.ulkanova.retrofit.PedidoRepositoryApi;
@@ -42,11 +48,14 @@ import java.util.List;
 
 public class PedidoActivity extends AppCompatActivity implements PedidoRepository.OnResultCallback {
     public static final int CODIGO_PEDIDO = 777;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1 ;
+    private static final int CODIGO_MAPA = 222;
     Toolbar toolbar;
     EditText txtEmail, txtDireccion;
     TextView lblTotal;
     RadioButton btnDelivery, btnTakeAway;
     FloatingActionButton addPedido;
+    ImageButton btnLocalizar;
     Plato platoSeleccionado;
     ListView listViewPedidos;
     List<Plato> pedido;
@@ -55,6 +64,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
     ArrayList<String> platosSeleccionados;
     ArrayList<Double> preciosPlatos;
     ArrayAdapter adapterLista;
+    LatLng ubicacion;
     Button btnConfirmar;
     TextView lblPedido;
     String strplatos=" plato";
@@ -106,6 +116,7 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
         btnConfirmar = findViewById(R.id.btnConfirmarPedido);
         lblPedido = findViewById(R.id.txtMiPedido);
         lblTotal = findViewById(R.id.lblTotal);
+        btnLocalizar = findViewById(R.id.btnLocalizar);
 
         listViewPedidos.setAdapter(adapterLista);
 
@@ -144,20 +155,36 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
 //                    tarea.execute(pedido.toArray(new Plato[0]));
                     Toast.makeText(getApplicationContext(),"Su pedido está siendo procesado...",Toast.LENGTH_SHORT).show();
                     limpiarPedido();
-                    pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),pedido);
+                    pedidoConfirmar = new Pedido(txtEmail.getText().toString(),txtDireccion.getText().toString(),btnDelivery.isChecked(),pedido, ubicacion);
                     //Inserción por API
                     repositoryApi.insertar(pedidoConfirmar,mHandler);
                     //Inserción por BD
                     //repository.insertar(pedidoConfirmar,idPlatos);
-
-
-                //
+                }
+                else if (v.getId()==btnLocalizar.getId()){
+                    localizar();
                 }
             }
         };
 
         btnConfirmar.setOnClickListener(listenerClick);
         addPedido.setOnClickListener(listenerClick);
+        btnLocalizar.setOnClickListener(listenerClick);
+    }
+
+    private void localizar() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+//            if (mMap != null) {
+//                map.setMyLocationEnabled(true);
+//            }
+            // CREAR MAPA ENVIÁNDOLE MI UBICACIÓN
+            Intent localizarIntent = new Intent(PedidoActivity.this, MapsActivity.class);
+            startActivityForResult(localizarIntent,CODIGO_MAPA);
+        } else {
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        }
     }
 
     public void limpiarPedido() {
@@ -191,6 +218,10 @@ public class PedidoActivity extends AppCompatActivity implements PedidoRepositor
                 if(platosSeleccionados.size()>1) strplatos=" platos";
                 lblPedido.setText("Mi Pedido de "+platosSeleccionados.size()+strplatos);
                 lblTotal.setText("Total: $"+total);
+            }
+            else if (requestCode == CODIGO_MAPA) {
+                ubicacion = new LatLng(data.getDoubleExtra("lat",0),data.getDoubleExtra("lng",0));
+                Log.d("PEDIDO", "Ubicacion encontrada: "+ubicacion);
             }
         }
     }

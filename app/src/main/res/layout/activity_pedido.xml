@@ -19,38 +19,58 @@
         android:hint="@string/email"
         android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/txtDireccionEnvio"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Dirección de envío"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtDireccionEnvio"
+            android:layout_width="354dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="Dirección de envío"
+            android:inputType="textPersonName" />
+
+        <ImageButton
+            android:id="@+id/btnLocalizar"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minWidth="20dp"
+            android:theme="@style/Theme.SeandMeal"
+            app:srcCompat="@android:drawable/ic_dialog_map" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <RadioGroup
             android:id="@+id/rdgrpTipoRetiro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center"
             android:orientation="horizontal">>
 
             <RadioButton
                 android:id="@+id/rdbtnTakeAway"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:paddingRight="25dp"
                 android:text="Take Away" />
 
             <RadioButton
                 android:id="@+id/rdbtnDelivery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:paddingRight="25dp"
                 android:text="Delivery" />
 
         </RadioGroup>

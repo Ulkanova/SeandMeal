@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,12 +29,22 @@ public class Pedido {
     @Ignore
     @Expose
     private List<Plato> platos;
+    @Expose
+    @Ignore
+    private LatLng ubicacion;
 
     @Ignore
     public Pedido(String email, String direccion, boolean delivery, List<Plato> platos) {
         this.email = email;
         this.direccion = direccion;
         this.delivery = delivery;
+        this.platos = platos;
+    }
+    public Pedido(String email, String direccion, boolean delivery, List<Plato> platos, LatLng ubicacion) {
+        this.email = email;
+        this.direccion = direccion;
+        this.delivery = delivery;
+        this.ubicacion=ubicacion;
         this.platos = platos;
     }
 
@@ -43,6 +54,12 @@ public class Pedido {
         this.delivery = delivery;
     }
 
+    public Pedido(String email, String direccion, boolean delivery, LatLng ubicacion) {
+        this.email = email;
+        this.direccion = direccion;
+        this.delivery = delivery;
+        this.ubicacion=ubicacion;
+    }
     public String getEmail() {
         return email;
     }
